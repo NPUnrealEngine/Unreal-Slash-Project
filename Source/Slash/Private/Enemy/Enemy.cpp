@@ -102,7 +102,6 @@ void AEnemy::MoveToTarget(AActor* Target)
 	MoveRequest.SetGoalActor(Target);
 	MoveRequest.SetAcceptanceRadius(60.f);
 	EnemyController->MoveTo(MoveRequest);
-
 }
 
 AActor* AEnemy::ChoosePatrolTarget()
@@ -128,81 +127,63 @@ AActor* AEnemy::ChoosePatrolTarget()
 void AEnemy::Die()
 {
 	EnemyState = EEnemyState::EES_Dead;
-
+	ClearAttackTimer();
+	GetCharacterMovement()->bOrientRotationToMovement = false;
 	HideHealthBar();
 	GetMesh()->SetGenerateOverlapEvents(false);
+	PlayDeathMontage();
+	//UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	//if (AnimInstance && DeathMontage)
+	//{
+	//	/* Play random section in montage without knowning section name ahead */
+	//	AnimInstance->Montage_Play(DeathMontage);
+	//	const int32 NumSections = DeathMontage->GetNumSections();
+	//	const int32 Selection = FMath::RandRange(0, NumSections - 1);
+	//	FName SectionName = DeathMontage->GetSectionName(Selection);
 
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance && DeathMontage)
-	{
-		/* Play random section in montage without knowning section name ahead */
-		AnimInstance->Montage_Play(DeathMontage);
-		const int32 NumSections = DeathMontage->GetNumSections();
-		const int32 Selection = FMath::RandRange(0, NumSections - 1);
-		FName SectionName = DeathMontage->GetSectionName(Selection);
+	//	switch (Selection)
+	//	{
+	//	case 0:
+	//		DeathPose = EDeathPose::EDP_Death1;
+	//		break;
+	//	case 1:
+	//		DeathPose = EDeathPose::EDP_Death2;
+	//		break;
+	//	case 2:
+	//		DeathPose = EDeathPose::EDP_Death3;
+	//		break;
+	//	case 3:
+	//		DeathPose = EDeathPose::EDP_Death4;
+	//		break;
+	//	case 4:
+	//		DeathPose = EDeathPose::EDP_Death5;
+	//		break;
+	//	case 5:
+	//		DeathPose = EDeathPose::EDP_Death6;
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//	AnimInstance->Montage_JumpToSection(SectionName, DeathMontage);
+	//}
 
-		switch (Selection)
-		{
-		case 0:
-			DeathPose = EDeathPose::EDP_Death1;
-			break;
-		case 1:
-			DeathPose = EDeathPose::EDP_Death2;
-			break;
-		case 2:
-			DeathPose = EDeathPose::EDP_Death3;
-			break;
-		case 3:
-			DeathPose = EDeathPose::EDP_Death4;
-			break;
-		case 4:
-			DeathPose = EDeathPose::EDP_Death5;
-			break;
-		case 5:
-			DeathPose = EDeathPose::EDP_Death6;
-			break;
-		default:
-			break;
-		}
-		AnimInstance->Montage_JumpToSection(SectionName, DeathMontage);
-	}
-
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	DisableCapsule();
 	SetLifeSpan(DeathLifeSpan);
-
 }
 
 void AEnemy::Attack()
 {
 	Super::Attack();
-	PlayAttackMontage();
+	if (EquippedWeapon)
+	{
+		PlayAttackMontage();
+	}
 }
 
 bool AEnemy::CanAttack()
 {
 	bool bCanAttack = IsInsideAttackRadius() && !IsAttacking() && !IsDead();
 	return bCanAttack;
-}
-
-void AEnemy::PlayAttackMontage()
-{
-	Super::PlayAttackMontage();
-
-	if (EquippedWeapon)
-	{
-		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-
-		// Get the attack montage associate with character state
-		UAnimMontage* SelectedMontage = AttackMontageMap.FindChecked(EquippedWeapon->GetWeaponType());
-		if (AnimInstance && SelectedMontage)
-		{
-			AnimInstance->Montage_Play(SelectedMontage);
-			const int32 NumSections = SelectedMontage->GetNumSections();
-			const int32 Selection = FMath::RandRange(0, NumSections - 1);
-			FName SectionName = SelectedMontage->GetSectionName(Selection);
-			AnimInstance->Montage_JumpToSection(SectionName, SelectedMontage);
-		}
-	}
 }
 
 void AEnemy::PawnSeen(APawn* SeenPawn)
@@ -220,6 +201,17 @@ void AEnemy::PawnSeen(APawn* SeenPawn)
 		ChaseTarget();
 		//UE_LOG(LogTemp, Warning, TEXT("Pawn seen, chase character"));
 	}
+}
+
+int32 AEnemy::PlayDeathMontage()
+{
+	const int32 Selection = Super::PlayDeathMontage();
+	TEnumAsByte<EDeathPose> Pose(Selection);
+	if (Pose < EDeathPose::EDP_Max)
+	{
+		DeathPose = Pose;
+	}
+	return Selection;
 }
 
 void AEnemy::HideHealthBar()

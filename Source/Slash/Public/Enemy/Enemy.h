@@ -30,7 +30,7 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	EDeathPose DeathPose;
+	TEnumAsByte<EDeathPose> DeathPose;
 
 	UPROPERTY(EditAnywhere, Category = "Enemy | Properties")
 	float DeathLifeSpan = 10.f;
@@ -48,7 +48,6 @@ protected:
 	virtual void Die() override;
 	virtual void Attack() override;
 	virtual bool CanAttack() override;
-	virtual void PlayAttackMontage() override;
 
 	UFUNCTION()
 	void PawnSeen(APawn* SeenPawn);
@@ -56,7 +55,7 @@ protected:
 	/*
 	* Play animation montage
 	*/
-	
+	virtual int32 PlayDeathMontage() override;
 
 private:
 	/* 
@@ -69,14 +68,14 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UHealthBarComponent> HealthBarWidget;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<AActor> CombatTarget;
 
 	UPROPERTY(EditAnywhere)
 	double CombatRadius = 500.f;
 
 	UPROPERTY(EditAnywhere)
-	double AttackRadius = 150.f;
+	double AttackRadius = 160.f;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	TSubclassOf<class AWeapon> WeaponClass;

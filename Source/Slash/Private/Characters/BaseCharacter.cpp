@@ -7,6 +7,7 @@
 #include <Kismet/GameplayStatics.h>
 #include <Items/Weapons/Weapon.h>
 #include <Components/BoxComponent.h>
+#include <Components/CapsuleComponent.h>
 
 
 ABaseCharacter::ABaseCharacter()
@@ -47,8 +48,33 @@ void ABaseCharacter::AttackEnd()
 {
 }
 
-void ABaseCharacter::PlayAttackMontage()
+int32 ABaseCharacter::PlayAttackMontage()
 {
+	// Get the attack montage associate with character state
+	UAnimMontage* SelectedMontage = AttackMontageMap.FindChecked(EquippedWeapon->GetWeaponType());
+	if (!SelectedMontage) return -1;
+
+	// Pick a section within montage
+	const int32 Selection = RandomMontageSection(SelectedMontage);
+	if (Selection < 0) return Selection;
+
+	FName SectionName = SelectedMontage->GetSectionName(Selection);
+
+	PlayMontageSection(SelectedMontage, SectionName);
+
+	return Selection;
+}
+
+int32 ABaseCharacter::PlayDeathMontage()
+{
+	const int32 Selection = RandomMontageSection(DeathMontage);
+	if (Selection < 0) return Selection;
+
+	FName SectionName = DeathMontage->GetSectionName(Selection);
+
+	PlayMontageSection(DeathMontage, SectionName);
+
+	return Selection;
 }
 
 void ABaseCharacter::PlayHitReactMontage(const FName& SectionName)
@@ -172,5 +198,30 @@ void ABaseCharacter::HandleDamage(float DamageAmount)
 	{
 		Attributes->ReceiveDamage(DamageAmount);
 	}
+}
+
+void ABaseCharacter::PlayMontageSection(UAnimMontage* Montage, const FName& SectionName)
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && Montage)
+	{
+		AnimInstance->Montage_Play(Montage);
+		AnimInstance->Montage_JumpToSection(SectionName, Montage);
+	}
+}
+
+const int32 ABaseCharacter::RandomMontageSection(UAnimMontage* Montage)
+{
+	const int32 NumSections = Montage->GetNumSections();
+	if (NumSections <= 0) return -1;
+
+	const int32 Selection = FMath::RandRange(0, NumSections - 1);
+
+	return Selection;
+}
+
+void ABaseCharacter::DisableCapsule()
+{
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

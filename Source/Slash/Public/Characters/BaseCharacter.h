@@ -41,6 +41,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation | Montage")
 	TMap<EWeaponType, UAnimMontage*> AttackMontageMap;
 
+
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void Attack();
@@ -51,6 +53,11 @@ protected:
 	void SpawnHitParticle(const FVector& ImpactPoint);
 	bool IsAlive();
 	virtual void HandleDamage(float DamageAmount);
+	virtual void PlayMontageSection(UAnimMontage* Montage, const FName& SectionName);
+	virtual const int32 RandomMontageSection(UAnimMontage* Montage);
+
+	/* Disable character's capsule collision */
+	void DisableCapsule();
 
 	/*
 	* Animation blueprint callback
@@ -66,7 +73,12 @@ protected:
 	* Play montage animation
 	*/
 
-	virtual void PlayAttackMontage();
+	/* Play attack montage
+	* It will play montage associate with weapon type then
+	* play random selected section
+	*/
+	virtual int32 PlayAttackMontage();
+	virtual int32 PlayDeathMontage();
 	void PlayHitReactMontage(const FName& SectionName);
 
 

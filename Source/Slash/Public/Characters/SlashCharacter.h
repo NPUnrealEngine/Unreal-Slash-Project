@@ -80,8 +80,6 @@ protected:
 	* Play montage functions
 	*/
 
-	virtual void PlayAttackMontage() override;
-
 	/* Callback for animation blueprint */
 	virtual void AttackEnd() override;
 

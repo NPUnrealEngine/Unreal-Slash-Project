@@ -281,31 +281,6 @@ void ASlashCharacter::EndTrail()
 //	}
 //}
 
-void ASlashCharacter::PlayAttackMontage()
-{
-	Super::PlayAttackMontage();
-
-	if (EquippedWeapon)
-	{
-		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-
-		if (USlashAnimInstance* SlashAnimInstance = Cast<USlashAnimInstance>(AnimInstance)) {
-			SlashAnimInstance->SetUpperBodyOnly(false);
-		}
-
-		// Get the attack montage associate with character state
-		UAnimMontage* SelectedMontage = AttackMontageMap.FindChecked(EquippedWeapon->GetWeaponType());
-		if (AnimInstance && SelectedMontage)
-		{
-			AnimInstance->Montage_Play(SelectedMontage);
-			const int32 NumSections = SelectedMontage->GetNumSections();
-			const int32 Selection = FMath::RandRange(0, NumSections - 1);
-			FName SectionName = SelectedMontage->GetSectionName(Selection);
-			AnimInstance->Montage_JumpToSection(SectionName, SelectedMontage);
-		}
-	}
-}
-
 //void ASlashCharacter::PlayAttackMontageByState(ECharacterState State)
 //{
 //	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
@@ -357,8 +332,11 @@ void ASlashCharacter::Attack()
 
 	if (CanAttack())
 	{
-		PlayAttackMontage();
-		ActionState = EActionState::EAS_Attacking;
+		if (EquippedWeapon)
+		{
+			PlayAttackMontage();
+			ActionState = EActionState::EAS_Attacking;
+		}
 	}
 }
 
