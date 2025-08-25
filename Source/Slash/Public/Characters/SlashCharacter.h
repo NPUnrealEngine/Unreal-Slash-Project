@@ -23,13 +23,30 @@ class SLASH_API ASlashCharacter : public ABaseCharacter
 
 public:
 	ASlashCharacter();
+
+#pragma region AActor_override
+
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+
+#pragma endregion AActor_override
+
 public:
+#pragma region Setter
+
 	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
+
+#pragma endregion Setter
+
+#pragma region Getter
+
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
+
+#pragma endregion Getter
+
 protected:
+#pragma region Input
+
 	/* Slash character input mapping context */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TSoftObjectPtr<UInputMappingContext> SlashContext;
@@ -57,21 +74,37 @@ protected:
 	/* Dodge input action */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> DodgeAction;
+
+#pragma endregion Input
+
 protected:
+#pragma region AActor_override
+
 	virtual void BeginPlay() override;
+
+#pragma endregion AActor_override
+
+#pragma region ABaseCharacter_override
+
 	virtual void Attack() override;
+
+#pragma endregion ABaseCharacter_override
+
+	
+#pragma region Input_callback
 
 	/* Callback move forward for old input system */
 	//void MoveForward(float Value);
 
 	/* Callback functions for enhanced input system */
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Jump();
 	void EKeyPressed();
 	void Dodge();
 
-	
+#pragma endregion Input_callback
 
 	/* Set character state by weapon type*/
 	void SetCharacterStateByWeaponType(EWeaponType WeaponType);
@@ -81,21 +114,37 @@ protected:
 	*/
 
 	/* Callback for animation blueprint */
-	virtual void AttackEnd() override;
-
-	virtual bool CanAttack() override;
+	
+#pragma region Animation
 
 	void PlayEquipMontage(FName SectionName);
+
+#pragma endregion Animation
+
+	
+#pragma region Combat
+
+	void EquipWeapon(AWeapon* Weapon);
+	void UnequipWeapon(AWeapon* Weapon);
+	virtual void AttackEnd() override;
+	virtual bool CanAttack() override;
 	bool CanDisarm();
-	bool CanArm();
-
-	/* Callback for animation blueprint */
-	UFUNCTION(BlueprintCallable)
 	void Disarm();
+	bool CanArm();
+	void Arm();
 
 	/* Callback for animation blueprint */
 	UFUNCTION(BlueprintCallable)
-	void Arm();
+	void AttachWeaponToBack();
+
+	/* Callback for animation blueprint */
+	UFUNCTION(BlueprintCallable)
+	void AttachWeaponToHand();
+
+#pragma endregion Combat
+
+
+#pragma region Equipped_item
 
 	/* Callback for animation blueprint */
 	UFUNCTION(BlueprintCallable)
@@ -113,7 +162,11 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void EndTrail();
 
+#pragma endregion Equipped_item
+
 private:
+#pragma region Character_properties
+
 	/* Character state */
 	UPROPERTY(VisibleAnywhere)
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
@@ -138,10 +191,14 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Groom | EyeBrows")
 	TObjectPtr<UGroomComponent> EyeBrows;
 
+#pragma endregion Character_properties
+
+#pragma region Detect_item
+
 	UPROPERTY(VisibleInstanceOnly)
 	TObjectPtr<AItem> OverlappingItem;
 
-	
+#pragma endregion Detect_item
 
 	/*
 	* Animation montage
@@ -155,7 +212,10 @@ private:
 	//UPROPERTY(EditDefaultsOnly, Category = "Montages")
 	//TObjectPtr<UAnimMontage> Attack2HandMontage;
 
+#pragma region Animation
+
 	UPROPERTY(EditDefaultsOnly, Category = "Animation | Montage")
 	TObjectPtr<UAnimMontage> EquipMontage;
 
+#pragma endregion Animation
 };
