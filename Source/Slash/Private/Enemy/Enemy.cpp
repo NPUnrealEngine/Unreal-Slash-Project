@@ -78,18 +78,9 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactPoint)
 {
 	//DRAW_COLOR_SPHERE_DURATION_RADIUS(ImpactPoint, FColor::Orange, 5.f, 8.f);
 
-	ShowHealthBar();
-	if (IsAlive())
-	{
-		DirectionalHitReact(ImpactPoint);
-	}
-	else
-	{
-		Die();
-	}
-
-	PlayHitSound(ImpactPoint);
-	SpawnHitParticle(ImpactPoint);
+	Super::GetHit_Implementation(ImpactPoint);
+	if(!IsDead()) ShowHealthBar();
+	ClearPatrolTimer();
 }
 
 void AEnemy::HandleDamage(float DamageAmount)
@@ -136,6 +127,7 @@ void AEnemy::Die()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	HideHealthBar();
 	GetMesh()->SetGenerateOverlapEvents(false);
+	SetWeaponCollisionEnable(ECollisionEnabled::NoCollision);
 	PlayDeathMontage();
 	//UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	//if (AnimInstance && DeathMontage)

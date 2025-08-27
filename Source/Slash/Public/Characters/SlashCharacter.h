@@ -175,6 +175,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void EndTrail();
 
+	/* Callback for animation blueprint */
+	UFUNCTION(BlueprintCallable)
+	void HitReactEnd();
+
 #pragma endregion Equipped_item
 
 private:

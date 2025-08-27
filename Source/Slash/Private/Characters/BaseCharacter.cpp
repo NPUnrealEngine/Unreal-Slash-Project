@@ -31,6 +31,21 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 }
 
+void ABaseCharacter::GetHit_Implementation(const FVector& ImpactPoint)
+{
+	if (IsAlive())
+	{
+		DirectionalHitReact(ImpactPoint);
+	}
+	else
+	{
+		Die();
+	}
+
+	PlayHitSound(ImpactPoint);
+	SpawnHitParticle(ImpactPoint);
+}
+
 void ABaseCharacter::SetWeaponCollisionEnable(ECollisionEnabled::Type CollisionEnable)
 {
 	if (EquippedWeapon && EquippedWeapon->GetWeaponBox())

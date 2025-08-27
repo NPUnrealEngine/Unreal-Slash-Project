@@ -23,6 +23,13 @@ public:
 
 #pragma endregion AActor_override
 
+#pragma region IHitInterface
+
+	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
+
+#pragma endregion IHitInterface
+
+
 protected:
 #pragma region Combat
 
