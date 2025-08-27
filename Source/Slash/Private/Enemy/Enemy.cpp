@@ -110,6 +110,7 @@ void AEnemy::BeginPlay()
 	if (PawnSensing) PawnSensing->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
 
 	InitializeEmeny();
+	Tags.Add(FName("Enemy"));
 }
 
 void AEnemy::DrawDebugNavPathPoints(TArray<FNavPathPoint>& PathPoints)
@@ -225,7 +226,7 @@ void AEnemy::PawnSeen(APawn* SeenPawn)
 		EnemyState != EEnemyState::EES_Dead &&
 		EnemyState < EEnemyState::EES_Attacking &&
 		EnemyState != EEnemyState::EES_Chasing &&
-		SeenPawn->ActorHasTag(FName("SlashCharacter"));
+		SeenPawn->ActorHasTag(FName("EngagableTarget"));
 
 	if (bShouldChaseTarget)
 	{

@@ -31,6 +31,15 @@ public:
 
 #pragma endregion AActor_override
 
+#pragma region IHitInterface
+	/** IHitInterface */
+
+	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
+
+	/** IHitInterface */
+#pragma endregion IHitInterface
+
+
 public:
 #pragma region Setter
 
@@ -119,6 +128,10 @@ protected:
 
 	void PlayEquipMontage(FName SectionName);
 
+	/* Enable xix upper body and lower body 
+	while playing animation montage */
+	void SetMixedBodyAnimEnabled(bool Enabled);
+
 #pragma endregion Animation
 
 	
@@ -168,11 +181,11 @@ private:
 #pragma region Character_properties
 
 	/* Character state */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Character state")
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
 
 	/* Character's action state */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Character state")
 	EActionState ActionState = EActionState::EAS_Unoccupied;
 
 	/* Spring Arm */

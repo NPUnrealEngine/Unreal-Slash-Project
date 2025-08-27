@@ -19,6 +19,11 @@ public:
 public:
 	AWeapon();
 	void Equip(USceneComponent* InParent, FName InSocketName, AActor* NewOwner, APawn* NewInstigator);
+	void DeactivateEmber();
+	void DisableSphereCollision();
+	void PlayEquipSound();
+	void EnableSphereCollision();
+	void ActivateEmber();
 	void Drop(FVector Location);
 	void AttachMeshToSocket(USceneComponent* InParent, const FName& InSocketName);
 
@@ -47,11 +52,11 @@ protected:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 	
 	UFUNCTION()
 	virtual void OnWeaponBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	void ExecuteGetHit(FHitResult& BoxHit);
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateField(const FVector& FieldLocation);
@@ -71,4 +76,10 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	float Damage = 20.f;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	bool bShowDebugBox = false;
+
+private:
+	void BoxTrace(FHitResult& BoxHit);
 };

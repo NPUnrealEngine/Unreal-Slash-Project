@@ -2,6 +2,7 @@
 
 #include <Characters/SlashCharacter.h>
 #include <Characters/SlashAnimInstance.h>
+#include <Components/StaticMeshComponent.h>
 #include <GameFramework/SpringArmComponent.h>
 #include <GameFramework/CharacterMovementComponent.h>
 #include <Camera/CameraComponent.h>
@@ -25,6 +26,18 @@ ASlashCharacter::ASlashCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 900.f, 0.f);
 
+	GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	GetMesh()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(
+		ECollisionChannel::ECC_Visibility, 
+		ECollisionResponse::ECR_Block
+	);
+	GetMesh()->SetCollisionResponseToChannel(
+		ECollisionChannel::ECC_WorldDynamic,
+		ECollisionResponse::ECR_Overlap
+	);
+	GetMesh()->SetGenerateOverlapEvents(true);
+
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->TargetArmLength = 300.f;
@@ -46,7 +59,7 @@ void ASlashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Tags.Add(FName("SlashCharacter"));
+	Tags.Add(FName("EngagableTarget"));
 
 	/* Offical implementation */
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
@@ -153,7 +166,8 @@ void ASlashCharacter::EKeyPressed()
 		{
 			UnequipWeapon(EquippedWeapon);
 		}
-		EquipWeapon(OverlappingWeapon);
+
+		if (EquippedWeapon == nullptr) EquipWeapon(OverlappingWeapon);
 	}
 	else
 	{
@@ -308,13 +322,19 @@ void ASlashCharacter::PlayEquipMontage(FName SectionName)
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
-	if (USlashAnimInstance* SlashAnimInstance = Cast<USlashAnimInstance>(AnimInstance)) {
-		SlashAnimInstance->SetUpperBodyOnly(true);
-	}
+	SetMixedBodyAnimEnabled(true);
 	if (AnimInstance && EquipMontage)
 	{
 		AnimInstance->Montage_Play(EquipMontage);
 		AnimInstance->Montage_JumpToSection(SectionName, EquipMontage);
+	}
+}
+
+void ASlashCharacter::SetMixedBodyAnimEnabled(bool Enabled)
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (USlashAnimInstance* SlashAnimInstance = Cast<USlashAnimInstance>(AnimInstance)) {
+		SlashAnimInstance->SetUpperBodyOnly(Enabled);
 	}
 }
 
@@ -332,6 +352,8 @@ void ASlashCharacter::UnequipWeapon(AWeapon* Weapon)
 {
 	Weapon->Drop(OverlappingItem->GetActorLocation());
 	OverlappingItem = nullptr;
+	EquippedWeapon = nullptr;
+	CharacterState = ECharacterState::ECS_Unequipped;
 }
 
 void ASlashCharacter::AttackEnd()
@@ -353,6 +375,7 @@ void ASlashCharacter::Attack()
 	{
 		if (EquippedWeapon)
 		{
+			SetMixedBodyAnimEnabled(false);
 			PlayAttackMontage();
 			ActionState = EActionState::EAS_Attacking;
 		}
@@ -403,6 +426,12 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	/* Old input system callback binding */
 	//PlayerInputComponent->BindAxis(FName("MoveForward"), this, &ASlashCharacter::MoveForward);
+}
+
+void ASlashCharacter::GetHit_Implementation(const FVector& ImpactPoint)
+{
+	PlayHitSound(ImpactPoint);
+	SpawnHitParticle(ImpactPoint);
 }
 
 

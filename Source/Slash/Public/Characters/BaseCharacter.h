@@ -16,6 +16,7 @@ class SLASH_API ABaseCharacter : public ACharacter, public IHitInterface
 public:
 	ABaseCharacter();
 
+public:
 #pragma region AActor_override
 
 	virtual void Tick(float DeltaTime) override;
@@ -115,4 +116,5 @@ private:
 	TObjectPtr<UParticleSystem> HitParticle;
 
 #pragma endregion VFX
+
 };

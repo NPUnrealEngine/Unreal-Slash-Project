@@ -23,7 +23,6 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void ABaseCharacter::Tick(float DeltaTime)
