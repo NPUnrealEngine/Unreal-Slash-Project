@@ -80,6 +80,7 @@ protected:
 	virtual int32 PlayAttackMontage();
 	virtual int32 PlayDeathMontage();
 	void PlayHitReactMontage(const FName& SectionName);
+	void StopAttackMontage();
 
 #pragma endregion Animation
 

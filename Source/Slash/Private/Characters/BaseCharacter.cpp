@@ -102,6 +102,19 @@ void ABaseCharacter::PlayHitReactMontage(const FName& SectionName)
 	}
 }
 
+void ABaseCharacter::StopAttackMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance)
+	{
+		UAnimMontage* SelectedMontage = AttackMontageMap.FindChecked(EquippedWeapon->GetWeaponType());
+		if (!SelectedMontage)
+		{
+			AnimInstance->Montage_Stop(0.25f, SelectedMontage);
+		}
+	}
+}
+
 bool ABaseCharacter::CanAttack()
 {
 	return false;

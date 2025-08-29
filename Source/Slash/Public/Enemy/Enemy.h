@@ -46,10 +46,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	TEnumAsByte<EDeathPose> DeathPose;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
+
 	UPROPERTY(EditAnywhere, Category = "Enemy | Properties")
 	float DeathLifeSpan = 10.f;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
 #pragma endregion AEmeny
@@ -90,9 +93,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UHealthBarComponent> HealthBarWidget;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<AActor> CombatTarget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	double CombatRadius = 500.f;
