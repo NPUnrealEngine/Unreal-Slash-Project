@@ -46,9 +46,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	TEnumAsByte<EDeathPose> DeathPose;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
-	TObjectPtr<AActor> CombatTarget;
-
 	UPROPERTY(EditAnywhere, Category = "Enemy | Properties")
 	float DeathLifeSpan = 10.f;
 

@@ -8,6 +8,7 @@
 #include <Items/Weapons/Weapon.h>
 #include <Components/BoxComponent.h>
 #include <Components/CapsuleComponent.h>
+#include <Slash/DebugMacros.h>
 
 
 ABaseCharacter::ABaseCharacter()
@@ -61,6 +62,28 @@ void ABaseCharacter::Attack()
 
 void ABaseCharacter::AttackEnd()
 {
+}
+
+FVector ABaseCharacter::GetTranslationWarpTarget()
+{
+	if(CombatTarget == nullptr) return FVector();
+
+	const FVector CombatTargetLocation = CombatTarget->GetActorLocation();
+	const FVector Location = GetActorLocation();
+
+	FVector TargetToMe = (Location - CombatTargetLocation).GetSafeNormal();
+	TargetToMe *= WarpTargetDistance;
+	//DRAW_COLOR_SPHERE_DURATION(CombatTargetLocation + TargetToMe, FColor::Red, 3.f);
+	return CombatTargetLocation + TargetToMe;
+}
+
+FVector ABaseCharacter::GetRotationWarpTarget()
+{
+	if (CombatTarget)
+	{
+		return CombatTarget->GetActorLocation();
+	}
+	return FVector();
 }
 
 int32 ABaseCharacter::PlayAttackMontage()

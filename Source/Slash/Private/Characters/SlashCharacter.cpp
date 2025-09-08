@@ -343,6 +343,12 @@ void ASlashCharacter::SetMixedBodyAnimEnabled(bool Enabled)
 	}
 }
 
+float ASlashCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	HandleDamage(DamageAmount);
+	return DamageAmount;
+}
+
 void ASlashCharacter::EquipWeapon(AWeapon* Weapon)
 {
 	Weapon->Equip(GetMesh(), FName("RightHandSocket"), this, this);

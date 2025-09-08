@@ -137,6 +137,7 @@ protected:
 	
 #pragma region Combat
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	void EquipWeapon(AWeapon* Weapon);
 	void UnequipWeapon(AWeapon* Weapon);
 	virtual void AttackEnd() override;

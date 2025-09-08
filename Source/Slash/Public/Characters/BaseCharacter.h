@@ -39,6 +39,12 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UAttributeComponent> Attributes;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	double WarpTargetDistance = 75.f;
+
 #pragma endregion Combat
 
 protected:
@@ -58,6 +64,10 @@ protected:
 	virtual void HandleDamage(float DamageAmount);
 	UFUNCTION(BlueprintCallable)
 	virtual void AttackEnd();
+	UFUNCTION(BlueprintCallable)
+	FVector GetTranslationWarpTarget();
+	UFUNCTION(BlueprintCallable)
+	FVector GetRotationWarpTarget();
 
 #pragma endregion Combat
 
