@@ -91,6 +91,10 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	void SetupPlayerInput();
+
+	
+
 #pragma endregion AActor_override
 
 #pragma region ABaseCharacter_override
@@ -109,7 +113,7 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-	void Jump();
+	virtual void Jump() override;
 	void EKeyPressed();
 	void Dodge();
 
@@ -209,6 +213,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Groom | EyeBrows")
 	TObjectPtr<UGroomComponent> EyeBrows;
 
+	UPROPERTY()
+	TObjectPtr<class USlashOverlay> SlashOverlay;
+
 #pragma endregion Character_properties
 
 #pragma region Detect_item
@@ -236,4 +243,9 @@ private:
 	TObjectPtr<UAnimMontage> EquipMontage;
 
 #pragma endregion Animation
+
+private:
+	void InitializeSlashOverlay();
+	void SetHUDHealth();
+	bool IsUnoccupied();
 };
