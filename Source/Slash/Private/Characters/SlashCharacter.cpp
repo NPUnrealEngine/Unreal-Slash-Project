@@ -106,8 +106,12 @@ void ASlashCharacter::SetupPlayerInput()
 
 void ASlashCharacter::Move(const FInputActionValue& Value) 
 {
-	/* Only attacking action can't move */
+
+	/* Do not allowed to move while attacking */
 	if (ActionState == EActionState::EAS_Attacking) return;
+
+	/* Do not allowed to move while death */
+	if (ActionState == EActionState::EAS_Dead) return;
 
 	/* Any actions can't move */
 	//if (ActionState != EActionState::EAS_Unoccupied) return;
@@ -172,6 +176,8 @@ void ASlashCharacter::Jump()
 
 void ASlashCharacter::EKeyPressed()
 {
+	if (ActionState == EActionState::EAS_Dead) return;
+
 	AWeapon* OverlappingWeapon = Cast<AWeapon>(OverlappingItem);
 	if (OverlappingWeapon)
 	{
@@ -224,6 +230,14 @@ void ASlashCharacter::Arm()
 	ActionState = EActionState::EAS_Equipping;
 
 	//UE_LOG(LogTemp, Warning, TEXT("Arm"));
+}
+
+void ASlashCharacter::Die()
+{
+	Super::Die();
+
+	ActionState = EActionState::EAS_Dead;
+	DisableMeshCollision();
 }
 
 void ASlashCharacter::AttachWeaponToBack()
@@ -457,7 +471,10 @@ void ASlashCharacter::GetHit_Implementation(const FVector& ImpactPoint)
 {
 	Super::GetHit_Implementation(ImpactPoint);
 
-	ActionState = EActionState::EAS_HitReaction;
+	if (Attributes && Attributes->GetHealthPercent() > 0.f)
+	{
+		ActionState = EActionState::EAS_HitReaction;
+	}
 }
 
 void ASlashCharacter::InitializeSlashOverlay()

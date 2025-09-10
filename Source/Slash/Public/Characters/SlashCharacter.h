@@ -50,6 +50,7 @@ public:
 #pragma region Getter
 
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
+	FORCEINLINE EActionState GetActionState() const { return ActionState; }
 
 #pragma endregion Getter
 
@@ -150,6 +151,7 @@ protected:
 	void Disarm();
 	bool CanArm();
 	void Arm();
+	virtual void Die() override;
 
 	/* Callback for animation blueprint */
 	UFUNCTION(BlueprintCallable)

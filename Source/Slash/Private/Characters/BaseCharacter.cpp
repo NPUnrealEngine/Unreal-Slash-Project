@@ -86,6 +86,11 @@ FVector ABaseCharacter::GetRotationWarpTarget()
 	return FVector();
 }
 
+void ABaseCharacter::DisableMeshCollision()
+{
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
 int32 ABaseCharacter::PlayAttackMontage()
 {
 	// Get the attack montage associate with character state
@@ -106,10 +111,14 @@ int32 ABaseCharacter::PlayAttackMontage()
 int32 ABaseCharacter::PlayDeathMontage()
 {
 	const int32 Selection = RandomMontageSection(DeathMontage);
+	TEnumAsByte<EDeathPose> Pose(Selection);
+	if (Pose < EDeathPose::EDP_Max)
+	{
+		DeathPose = Pose;
+	}
+
 	if (Selection < 0) return Selection;
-
 	FName SectionName = DeathMontage->GetSectionName(Selection);
-
 	PlayMontageSection(DeathMontage, SectionName);
 
 	return Selection;
@@ -145,6 +154,7 @@ bool ABaseCharacter::CanAttack()
 
 void ABaseCharacter::Die()
 {
+	PlayDeathMontage();
 }
 
 void ABaseCharacter::DirectionalHitReact(const FVector& ImpactPoint)

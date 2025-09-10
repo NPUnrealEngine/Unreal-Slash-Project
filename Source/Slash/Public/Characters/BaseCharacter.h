@@ -6,6 +6,7 @@
 #include <Slash/Public/Items/Weapons/WeaponType.h>
 #include <Slash/Public/Interfaces/HitInterface.h>
 #include "GameFramework/Character.h"
+#include <Characters/CharacterType.h>
 #include "BaseCharacter.generated.h"
 
 UCLASS()
@@ -29,6 +30,8 @@ public:
 
 #pragma endregion IHitInterface
 
+public:
+	FORCEINLINE TEnumAsByte<EDeathPose> GetDeathPose() const { return DeathPose; }
 
 protected:
 #pragma region Combat
@@ -44,6 +47,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	double WarpTargetDistance = 75.f;
+
+	UPROPERTY(BlueprintReadOnly)
+	TEnumAsByte<EDeathPose> DeathPose;
 
 #pragma endregion Combat
 
@@ -68,6 +74,7 @@ protected:
 	FVector GetTranslationWarpTarget();
 	UFUNCTION(BlueprintCallable)
 	FVector GetRotationWarpTarget();
+	void DisableMeshCollision();
 
 #pragma endregion Combat
 

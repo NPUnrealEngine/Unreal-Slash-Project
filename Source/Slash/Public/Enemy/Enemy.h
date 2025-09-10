@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include <Characters/CharacterType.h>
 #include <Slash/Public/Characters/BaseCharacter.h>
 #include "Enemy.generated.h"
 
@@ -43,9 +42,6 @@ public:
 protected:
 #pragma region AEmeny
 
-	UPROPERTY(BlueprintReadOnly)
-	TEnumAsByte<EDeathPose> DeathPose;
-
 	UPROPERTY(EditAnywhere, Category = "Enemy | Properties")
 	float DeathLifeSpan = 10.f;
 
@@ -76,7 +72,6 @@ protected:
 	virtual void Attack() override;
 	virtual bool CanAttack() override;
 	virtual void AttackEnd() override;
-	virtual int32 PlayDeathMontage() override;
 
 	/** ABaseCharacter */
 #pragma endregion ABaseCharacter_override
