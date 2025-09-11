@@ -181,8 +181,10 @@ void AEnemy::Die()
 
 void AEnemy::Attack()
 {
-	EnemyState = EEnemyState::EES_Engaged;
 	Super::Attack();
+	if (CombatTarget == nullptr) return;
+
+	EnemyState = EEnemyState::EES_Engaged;
 	if (EquippedWeapon)
 	{
 		PlayAttackMontage();
@@ -218,7 +220,8 @@ void AEnemy::PawnSeen(APawn* SeenPawn)
 		EnemyState != EEnemyState::EES_Dead &&
 		EnemyState < EEnemyState::EES_Attacking &&
 		EnemyState != EEnemyState::EES_Chasing &&
-		SeenPawn->ActorHasTag(FName("EngagableTarget"));
+		SeenPawn->ActorHasTag(FName("EngagableTarget")) &&
+		!SeenPawn->ActorHasTag(FName("Dead"));
 
 	if (bShouldChaseTarget)
 	{

@@ -17,8 +17,6 @@ void ASlashHUD::BeginPlay()
 		{
 			SlashOverlay = CreateWidget<USlashOverlay>(Controller, SlashOverlayClass);
 			SlashOverlay->AddToViewport();
-
 		}
 	}
-
 }
