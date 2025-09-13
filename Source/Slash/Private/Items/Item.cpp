@@ -7,6 +7,8 @@
 #include "Components/SphereComponent.h"
 #include <NiagaraComponent.h>
 #include <Interfaces/PickupInterface.h>
+#include <NiagaraFunctionLibrary.h>
+#include <Kismet/GameplayStatics.h>
 
 #define THIRTY 30
 
@@ -101,6 +103,30 @@ void AItem::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	if (Pickup)
 	{
 		Pickup->SetOverlappingItem(nullptr);
+	}
+}
+
+void AItem::SpawnPickupEffect()
+{
+	if (PickupEffect)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			this,
+			PickupEffect,
+			GetActorLocation()
+		);
+	}
+}
+
+void AItem::SpawnPickupSound()
+{
+	if (PickupSound)
+	{
+		UGameplayStatics::SpawnSoundAtLocation(
+			this,
+			PickupSound,
+			GetActorLocation()
+		);
 	}
 }
 

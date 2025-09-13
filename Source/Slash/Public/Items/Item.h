@@ -50,6 +50,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UNiagaraComponent> ItemEffect;
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UNiagaraSystem> PickupEffect;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USoundBase> PickupSound;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -70,6 +76,9 @@ protected:
 
 	UFUNCTION()
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	virtual void SpawnPickupEffect();
+	virtual void SpawnPickupSound();
+
 private:
 	/* 
 	Actor time elapsed
