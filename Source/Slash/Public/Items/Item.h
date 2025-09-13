@@ -48,7 +48,7 @@ protected:
 	EItemState ItemState = EItemState::EIS_Hovering;
 
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<class UNiagaraComponent> EmbersEffect;
+	TObjectPtr<class UNiagaraComponent> ItemEffect;
 
 protected:
 	virtual void BeginPlay() override;

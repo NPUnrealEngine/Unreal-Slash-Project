@@ -59,6 +59,16 @@ ASlashCharacter::ASlashCharacter()
 
 }
 
+void ASlashCharacter::SetOverlappingItem(AItem* Item)
+{
+	OverlappingItem = Item;
+}
+
+void ASlashCharacter::AddSouls(ASoul* Soul)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Add soul"));
+}
+
 void ASlashCharacter::BeginPlay()
 {
 	Super::BeginPlay();

@@ -76,9 +76,9 @@ void AWeapon::Drop(FVector Location)
 
 void AWeapon::DeactivateEmber()
 {
-	if (EmbersEffect)
+	if (ItemEffect)
 	{
-		EmbersEffect->Deactivate();
+		ItemEffect->Deactivate();
 	}
 }
 
@@ -108,9 +108,9 @@ void AWeapon::EnableSphereCollision()
 
 void AWeapon::ActivateEmber()
 {
-	if (EmbersEffect)
+	if (ItemEffect)
 	{
-		EmbersEffect->Activate();
+		ItemEffect->Activate();
 	}
 }
 

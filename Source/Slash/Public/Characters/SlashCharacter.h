@@ -7,6 +7,7 @@
 #include <Characters/CharacterType.h>
 #include <Characters/BaseCharacter.h>
 #include <Items/Weapons/WeaponType.h>
+#include <Interfaces/PickupInterface.h>
 #include "SlashCharacter.generated.h"
 
 class UInputMappingContext;
@@ -17,12 +18,14 @@ class UGroomComponent;
 class AItem;
 
 UCLASS()
-class SLASH_API ASlashCharacter : public ABaseCharacter
+class SLASH_API ASlashCharacter : public ABaseCharacter, public IPickupInterface
 {
 	GENERATED_BODY()
 
 public:
 	ASlashCharacter();
+	virtual void SetOverlappingItem(AItem* Item) override;
+	virtual void AddSouls(ASoul* Soul) override;
 
 #pragma region AActor_override
 
@@ -42,8 +45,6 @@ public:
 
 public:
 #pragma region Setter
-
-	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
 
 #pragma endregion Setter
 
