@@ -5,12 +5,13 @@
 #include "CoreMinimal.h"
 #include <Slash/Public/Items/Weapons/WeaponType.h>
 #include <Slash/Public/Interfaces/HitInterface.h>
+#include <Interfaces/CharacterHealth.h>
 #include "GameFramework/Character.h"
 #include <Characters/CharacterType.h>
 #include "BaseCharacter.generated.h"
 
 UCLASS()
-class SLASH_API ABaseCharacter : public ACharacter, public IHitInterface
+class SLASH_API ABaseCharacter : public ACharacter, public IHitInterface, public ICharacterHealth
 {
 	GENERATED_BODY()
 

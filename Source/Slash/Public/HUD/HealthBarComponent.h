@@ -15,7 +15,13 @@ class SLASH_API UHealthBarComponent : public UWidgetComponent
 	GENERATED_BODY()
 
 public:
-	void SetHealthPercent(float Percent);
+	//void SetHealthPercent(float Percent);
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+protected:
+	UFUNCTION()
+	virtual void UpdateHealth(float CurrentHealth, float MaxHealth);
 
 private:
 	UPROPERTY()

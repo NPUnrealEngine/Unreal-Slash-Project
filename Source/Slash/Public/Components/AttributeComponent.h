@@ -23,6 +23,10 @@ public:
 	float GetHealthPercent();
 	bool IsAlive();
 
+public:
+	FORCEINLINE float GetCurrentHealth() const { return Health; }
+	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -97,10 +97,11 @@ void AEnemy::HandleDamage(float DamageAmount)
 {
 	Super::HandleDamage(DamageAmount);
 
-	if (HealthBarWidget)
+	/* Parent handle damage will borcast event */
+	/*if (HealthBarWidget)
 	{
 		HealthBarWidget->SetHealthPercent(Attributes->GetHealthPercent());
-	}
+	}*/
 }
 
 // Called when the game starts or when spawned

@@ -263,6 +263,15 @@ void ABaseCharacter::HandleDamage(float DamageAmount)
 	if (Attributes)
 	{
 		Attributes->ReceiveDamage(DamageAmount);
+
+		if (GetOnHealthUpdatedDelegate().IsBound())
+		{
+			GetOnHealthUpdatedDelegate().Broadcast(
+				Attributes->GetCurrentHealth(),
+				Attributes->GetMaxHealth()
+			);
+		}
+		
 	}
 }
 
