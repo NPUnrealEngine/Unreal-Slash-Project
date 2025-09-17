@@ -45,6 +45,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Enemy | Properties")
 	float DeathLifeSpan = 10.f;
 
+	UPROPERTY(EditAnywhere, Category = "Enemy | Properties")
+	TSubclassOf<class ASoul> SoulClass;
+
+	UPROPERTY(EditAnywhere, Category = "Enemy | Properties")
+	float SpawnedSoulZOffset = 0.f;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
@@ -69,6 +75,7 @@ protected:
 	/** ABaseCharacter */
 
 	virtual void Die() override;
+	void SpawnSoul();
 	virtual void Attack() override;
 	virtual bool CanAttack() override;
 	virtual void AttackEnd() override;

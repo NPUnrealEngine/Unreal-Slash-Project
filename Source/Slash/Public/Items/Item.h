@@ -68,8 +68,8 @@ protected:
 	UFUNCTION(BlueprintPure)
 	float RotateDelta(float DeltaTime);
 
-	template<typename T>
-	T Avg(T First, T Second);
+	/*template<typename T>
+	T Avg(T First, T Second);*/
 
 	UFUNCTION()
 	virtual void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -85,10 +85,23 @@ private:
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float RunningTime;
+
+	/**
+	 * Delay enable overlapping event when start.
+	 * 
+	 * Positive value to enable delay, default no delay.
+	 * 
+	 * Use Case: Prevent item overlapped and got pickup before setting
+	 item's properties. Allow a period of window for preparing item
+	 */
+	UPROPERTY(EditAnywhere, Category = "Item | Properties")
+	float DelayOverlapWhenStart = -1.f;
+
+	FTimerHandle DelayTimerHandle;
 };
 
-template<typename T>
-inline T AItem::Avg(T First, T Second)
-{
-	return (First + Second) / 2;
-}
+//template<typename T>
+//inline T AItem::Avg(T First, T Second)
+//{
+//	return (First + Second) / 2;
+//}

@@ -22,10 +22,14 @@ public:
 	void ReceiveDamage(float Damage);
 	float GetHealthPercent();
 	bool IsAlive();
+	void AddSouls(int32 NumberOfSouls);
+	void AddGold(int32 NumberOfGold);
 
 public:
 	FORCEINLINE float GetCurrentHealth() const { return Health; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+	FORCEINLINE int32 GetGold() const { return Gold; }
+	FORCEINLINE int32 GetSouls() const { return Souls; }
 
 protected:
 	// Called when the game starts
@@ -35,7 +39,13 @@ private:
 	/* Current health */
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
 	float Health = 100.f;
-
+	/* Max health */
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
 	float MaxHealth = 100.f;
+	/* Gold count */
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+	int32 Gold = 0;
+	/* Soul count */
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+	int32 Souls = 0;
 };

@@ -33,6 +33,19 @@ void AItem::BeginPlay()
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnSphereBeginOverlap);
 	Sphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnSphereEndOverlap);
 
+	if (DelayOverlapWhenStart > 0.f) 
+	{
+		Sphere->SetGenerateOverlapEvents(false);
+		GetWorldTimerManager().SetTimer(
+			DelayTimerHandle,
+			[this]()
+			{
+				Sphere->SetGenerateOverlapEvents(true);
+			},
+			DelayOverlapWhenStart,
+			false);
+	}
+
 	/*int32 AvgInt = Avg<int32>(1, 3);
 	UE_LOG(LogTemp, Warning, TEXT("Average 1 and 3 is %d"), AvgInt);
 

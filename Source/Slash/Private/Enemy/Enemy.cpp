@@ -13,6 +13,7 @@
 #include <Navigation/PathFollowingComponent.h>
 #include <Perception/PawnSensingComponent.h>
 #include <Items/Weapons/Weapon.h>
+#include <Items/Soul.h>
 
 // Sets default values
 AEnemy::AEnemy()
@@ -178,6 +179,20 @@ void AEnemy::Die()
 
 	DisableCapsule();
 	SetLifeSpan(DeathLifeSpan);
+	SpawnSoul();
+}
+
+void AEnemy::SpawnSoul()
+{
+	UWorld* World = GetWorld();
+	if (World && SoulClass && Attributes)
+	{
+		const FVector Location = GetActorLocation() + FVector(0.f, 0.f, SpawnedSoulZOffset);
+		ASoul* SpawnedSoul = World->SpawnActor<ASoul>(SoulClass, Location, GetActorRotation());
+		if (SpawnedSoul) {
+			SpawnedSoul->SetSouls(Attributes->GetSouls());
+		}
+	}
 }
 
 void AEnemy::Attack()
