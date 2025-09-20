@@ -64,17 +64,29 @@ protected:
 #pragma region Combat
 
 	virtual void Attack();
+	
 	virtual bool CanAttack();
+	
 	virtual void Die();
+	
 	virtual void DirectionalHitReact(const FVector& ImpactPoint);
+	
 	bool IsAlive();
+	
 	virtual void HandleDamage(float DamageAmount);
+
 	UFUNCTION(BlueprintCallable)
 	virtual void AttackEnd();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void DodgeEnd();
+
 	UFUNCTION(BlueprintCallable)
 	FVector GetTranslationWarpTarget();
+
 	UFUNCTION(BlueprintCallable)
 	FVector GetRotationWarpTarget();
+
 	void DisableMeshCollision();
 
 #pragma endregion Combat
@@ -92,11 +104,20 @@ protected:
 #pragma endregion SFX
 
 #pragma region Animation
+	
+	/** Play montage */
 
+	/**
+	 * Play montage.
+	 * 
+	 * \param Montage: The montage to be played
+	 * \param SectionName: Section name in montage
+	 */
 	virtual void PlayMontageSection(UAnimMontage* Montage, const FName& SectionName);
 	virtual const int32 RandomMontageSection(UAnimMontage* Montage);
 	virtual int32 PlayAttackMontage();
 	virtual int32 PlayDeathMontage();
+	virtual void PlayDodgeMontage();
 	void PlayHitReactMontage(const FName& SectionName);
 	void StopAttackMontage();
 
@@ -122,6 +143,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation | Montage")
 	TObjectPtr<UAnimMontage> DeathMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation | Montage")
+	TObjectPtr<UAnimMontage> DodgeMontage;
 
 	/* Attack montage associate character's weapon type */
 	UPROPERTY(EditDefaultsOnly, Category = "Animation | Montage")

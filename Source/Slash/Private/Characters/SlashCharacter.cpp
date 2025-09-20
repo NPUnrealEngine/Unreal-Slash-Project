@@ -266,6 +266,17 @@ void ASlashCharacter::Die()
 	DisableMeshCollision();
 }
 
+bool ASlashCharacter::IsOccupied()
+{
+	return ActionState != EActionState::EAS_Unoccupied;
+}
+
+bool ASlashCharacter::HasEnoughStamina()
+{
+	return Attributes && 
+		Attributes->GetStamina() > Attributes->GetDodgeCost();
+}
+
 void ASlashCharacter::AttachWeaponToBack()
 {
 	if (EquippedWeapon)
@@ -285,11 +296,13 @@ void ASlashCharacter::AttachWeaponToHand()
 void ASlashCharacter::FinishEquipping()
 {
 	ActionState = EActionState::EAS_Unoccupied;
+	SetMixedBodyAnimEnabled(false);
 }
 
 void ASlashCharacter::FinishUnequipping()
 {
 	ActionState = EActionState::EAS_Unoccupied;
+	SetMixedBodyAnimEnabled(false);
 }
 
 void ASlashCharacter::StartTrail()
@@ -423,7 +436,17 @@ void ASlashCharacter::UnequipWeapon(AWeapon* Weapon)
 
 void ASlashCharacter::AttackEnd()
 {
+	Super::AttackEnd();
+
 	ActionState = EActionState::EAS_Unoccupied;
+}
+
+void ASlashCharacter::DodgeEnd()
+{
+	Super::DodgeEnd();
+
+	ActionState = EActionState::EAS_Unoccupied;
+	GetMesh()->SetGenerateOverlapEvents(true);
 }
 
 bool ASlashCharacter::CanAttack()
@@ -449,7 +472,20 @@ void ASlashCharacter::Attack()
 
 void ASlashCharacter::Dodge()
 {
+	if (IsOccupied() || !HasEnoughStamina()) return;
+	if (GetMovementComponent()->IsFalling()) return;
+
+	GetMesh()->SetGenerateOverlapEvents(false);
+	PlayDodgeMontage();
+	ActionState = EActionState::EAS_Dodge;
+	if (Attributes && SlashOverlay)
+	{
+		Attributes->UseStamina(Attributes->GetDodgeCost());
+		SlashOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
+	}
 }
+
+
 
 void ASlashCharacter::SetCharacterStateByWeaponType(EWeaponType WeaponType)
 {
@@ -471,6 +507,11 @@ void ASlashCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (Attributes && SlashOverlay)
+	{
+		Attributes->RegenStamina(DeltaTime);
+		SlashOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
+	}
 }
 
 

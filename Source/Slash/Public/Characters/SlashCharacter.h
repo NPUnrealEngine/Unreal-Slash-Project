@@ -120,6 +120,8 @@ protected:
 	void EKeyPressed();
 	void Dodge();
 
+	
+
 #pragma endregion Input_callback
 
 	/* Set character state by weapon type*/
@@ -148,12 +150,15 @@ protected:
 	void EquipWeapon(AWeapon* Weapon);
 	void UnequipWeapon(AWeapon* Weapon);
 	virtual void AttackEnd() override;
+	virtual void DodgeEnd() override;
 	virtual bool CanAttack() override;
 	bool CanDisarm();
 	void Disarm();
 	bool CanArm();
 	void Arm();
 	virtual void Die() override;
+	bool IsOccupied();
+	bool HasEnoughStamina();
 
 	/* Callback for animation blueprint */
 	UFUNCTION(BlueprintCallable)

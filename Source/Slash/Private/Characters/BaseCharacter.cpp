@@ -68,6 +68,10 @@ void ABaseCharacter::AttackEnd()
 {
 }
 
+void ABaseCharacter::DodgeEnd()
+{
+}
+
 FVector ABaseCharacter::GetTranslationWarpTarget()
 {
 	if(CombatTarget == nullptr) return FVector();
@@ -126,6 +130,11 @@ int32 ABaseCharacter::PlayDeathMontage()
 	PlayMontageSection(DeathMontage, SectionName);
 
 	return Selection;
+}
+
+void ABaseCharacter::PlayDodgeMontage()
+{
+	PlayMontageSection(DodgeMontage, FName("Default"));
 }
 
 void ABaseCharacter::PlayHitReactMontage(const FName& SectionName)
