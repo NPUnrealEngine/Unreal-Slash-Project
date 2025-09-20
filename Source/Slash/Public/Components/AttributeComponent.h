@@ -35,6 +35,7 @@ public:
 	FORCEINLINE int32 GetSouls() const { return Souls; }
 	FORCEINLINE float GetDodgeCost() const { return DodgeCost; }
 	FORCEINLINE float GetStamina() const { return Stamina; }
+	FORCEINLINE float GetStaminaDelayRegen() const { return DelayStaminaRegen; }
 
 protected:
 	// Called when the game starts
@@ -70,4 +71,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
 	float StaminaRegenRate = 8.f;
+
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+	float DelayStaminaRegen = 1.5f;
 };

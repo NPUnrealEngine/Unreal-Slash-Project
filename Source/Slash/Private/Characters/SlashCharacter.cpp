@@ -96,6 +96,13 @@ void ASlashCharacter::BeginPlay()
 	SetupPlayerInput();
 }
 
+void ASlashCharacter::EndPlay(EEndPlayReason::Type EndPlayReason)
+{
+	DelayStaminaRegenTimer.Invalidate();
+
+	Super::EndPlay(EndPlayReason);
+}
+
 void ASlashCharacter::SetupPlayerInput()
 {
 	/* Offical implementation */
@@ -482,6 +489,18 @@ void ASlashCharacter::Dodge()
 	{
 		Attributes->UseStamina(Attributes->GetDodgeCost());
 		SlashOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
+
+		DelayStaminaRegenTimer.Invalidate();
+		bCanStaminaRegen = false;
+		GetWorldTimerManager().SetTimer(
+			DelayStaminaRegenTimer,
+			FTimerDelegate::CreateLambda([this]() 
+				{
+					bCanStaminaRegen = true;
+				}),
+			Attributes->GetStaminaDelayRegen(),
+			false
+		);
 	}
 }
 
@@ -507,7 +526,7 @@ void ASlashCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Attributes && SlashOverlay)
+	if (Attributes && SlashOverlay && bCanStaminaRegen)
 	{
 		Attributes->RegenStamina(DeltaTime);
 		SlashOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());

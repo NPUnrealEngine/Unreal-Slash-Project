@@ -57,6 +57,16 @@ public:
 #pragma endregion Getter
 
 protected:
+#pragma region Stamina Regen
+
+	/** Timer handle for stamina regen */
+	FTimerHandle DelayStaminaRegenTimer;
+
+	/** Whether it can regen stamina or not */
+	bool bCanStaminaRegen = true;
+
+#pragma endregion Stamina Regen
+
 #pragma region Input
 
 	/* Slash character input mapping context */
@@ -93,6 +103,7 @@ protected:
 #pragma region AActor_override
 
 	virtual void BeginPlay() override;
+	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 	void SetupPlayerInput();
 
