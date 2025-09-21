@@ -25,6 +25,11 @@ AWeapon::AWeapon()
 	BoxTraceEnd->SetupAttachment(GetRootComponent());
 }
 
+bool AWeapon::IsEquipped()
+{
+	return bIsEquipped;
+}
+
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
@@ -56,6 +61,8 @@ void AWeapon::Equip(USceneComponent* InParent, FName InSocketName, AActor* NewOw
 	DisableSphereCollision();
 
 	DeactivateEmber();
+	bIsEquipped = true;
+	if (OnWeaponEquipped.IsBound()) OnWeaponEquipped.Broadcast();
 }
 
 void AWeapon::Drop(FVector Location)
@@ -72,6 +79,8 @@ void AWeapon::Drop(FVector Location)
 	EnableSphereCollision();
 
 	ActivateEmber();
+	bIsEquipped = false;
+	if (OnWeaponDropped.IsBound()) OnWeaponDropped.Broadcast();
 }
 
 void AWeapon::DeactivateEmber()

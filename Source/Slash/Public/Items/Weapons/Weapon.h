@@ -5,12 +5,13 @@
 #include "CoreMinimal.h"
 #include "Items/Item.h"
 #include <Items/Weapons/WeaponType.h>
+#include <Interfaces/WeaponInterface.h>
 #include "Weapon.generated.h"
 
 class UBoxComponent;
 
 UCLASS()
-class SLASH_API AWeapon : public AItem
+class SLASH_API AWeapon : public AItem, public IWeaponInterface
 {
 	GENERATED_BODY()
 
@@ -18,13 +19,14 @@ public:
 	TArray<AActor*> IgnoreActors;
 public:
 	AWeapon();
+	virtual bool IsEquipped() override;
 	void Equip(USceneComponent* InParent, FName InSocketName, AActor* NewOwner, APawn* NewInstigator);
+	void Drop(FVector Location);
 	void DeactivateEmber();
 	void DisableSphereCollision();
 	void PlayEquipSound();
 	void EnableSphereCollision();
 	void ActivateEmber();
-	void Drop(FVector Location);
 	void AttachMeshToSocket(USceneComponent* InParent, const FName& InSocketName);
 
 	/* Start weapon trail */
@@ -36,6 +38,7 @@ public:
 public:
 	FORCEINLINE UBoxComponent* GetWeaponBox() const { return WeaponBox; }
 	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
+	FORCEINLINE bool GetIsEquipped() const { return bIsEquipped; }
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Weapon Type")
@@ -49,6 +52,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Trail | Properties")
 	float WeaponTrailWidth = 1.f;
+
+	/** Whether the weapon is equipped or not */
+	bool bIsEquipped = false;
 
 protected:
 	virtual void BeginPlay() override;

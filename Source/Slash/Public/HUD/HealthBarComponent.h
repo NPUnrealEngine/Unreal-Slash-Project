@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SLASH_API UHealthBarComponent : public UWidgetComponent
 {
 	GENERATED_BODY()
