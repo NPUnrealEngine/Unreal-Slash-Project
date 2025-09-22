@@ -67,6 +67,10 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateField(const FVector& FieldLocation);
 
+	virtual void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
+
+	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	TObjectPtr<USoundBase> EquipSound;
@@ -85,6 +89,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	bool bShowDebugBox = false;
+
+	FTimerHandle DelaySphereCollisionTimer;
 
 private:
 	void BoxTrace(FHitResult& BoxHit);

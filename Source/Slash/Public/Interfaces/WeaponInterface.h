@@ -6,8 +6,31 @@
 #include "UObject/Interface.h"
 #include "WeaponInterface.generated.h"
 
+/**
+ * Delegate weapon equipped.
+ */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponEquipped);
+
+/**
+ * Delegate weapon dropped.
+ */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponDropped);
+
+/**
+ * Delegate weapon begin overlap player.
+ * 
+ * \param Pawn: A pawn control by player
+ * \param PlayerController: Player controller
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponBeginOverlapPlayer, APawn*, Pawn, APlayerController*, PlayerController);
+
+/**
+ * Delegate weapon end overlap player.
+ *
+ * \param Pawn: A pawn control by player
+ * \param PlayerController: Player controller
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponEndOverlapPlayer, APawn*, Pawn, APlayerController*, PlayerController);
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
@@ -27,6 +50,8 @@ class SLASH_API IWeaponInterface
 public:
 	FOnWeaponEquipped OnWeaponEquipped;
 	FOnWeaponDropped OnWeaponDropped;
+	FOnWeaponBeginOverlapPlayer OnWeaponBeginOverlapPlayer;
+	FOnWeaponEndOverlapPlayer OnWeaponEndOverlapPlayer;
 
 public:
 	virtual bool IsEquipped() = 0;

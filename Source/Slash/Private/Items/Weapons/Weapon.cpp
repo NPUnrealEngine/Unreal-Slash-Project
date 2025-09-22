@@ -76,7 +76,13 @@ void AWeapon::Drop(FVector Location)
 	this->SetActorLocation(Location);
 	this->SetActorRotation(FRotator::ZeroRotator);
 
-	EnableSphereCollision();
+	GetWorldTimerManager().SetTimer(
+		DelaySphereCollisionTimer,
+		this,
+		&AWeapon::EnableSphereCollision,
+		1.f,
+		false
+	);
 
 	ActivateEmber();
 	bIsEquipped = false;
@@ -181,6 +187,40 @@ void AWeapon::ExecuteGetHit(FHitResult& BoxHit)
 	{
 		HitInterface->Execute_GetHit(BoxHit.GetActor(), BoxHit.ImpactPoint);
 	}
+}
+
+void AWeapon::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Super::OnSphereBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+
+	APawn* Pawn = Cast<APawn>(OtherActor);
+	if (Pawn)
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(Pawn->GetController()))
+		{
+			// Brocast weapon begin overlap player
+			if (OnWeaponBeginOverlapPlayer.IsBound())
+				OnWeaponBeginOverlapPlayer.Broadcast(Pawn, PlayerController);
+		}
+	}
+	
+}
+
+void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	Super::OnSphereEndOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
+
+	APawn* Pawn = Cast<APawn>(OtherActor);
+	if (Pawn)
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(Pawn->GetController()))
+		{
+			// Brocast weapon end overlap player
+			if (OnWeaponEndOverlapPlayer.IsBound())
+				OnWeaponEndOverlapPlayer.Broadcast(Pawn, PlayerController);
+		}
+	}
+	
 }
 
 void AWeapon::BoxTrace(FHitResult& BoxHit)

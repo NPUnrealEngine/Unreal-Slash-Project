@@ -21,10 +21,22 @@ private:
 	UPROPERTY();
 	TObjectPtr<class UPickupIndicator> PickupIndicatorWidget;
 
+	bool bOverlapPlayer = false;
+	bool bEquipped = false;
+
 private:
 	UFUNCTION()
-	void SetVisible();
+	void OnEquipped();
 	
 	UFUNCTION()
-	void SetInvisible();
+	void OnDropped();
+
+	UFUNCTION()
+	void OnBeginOverlapPlayer(APawn* Pawn, APlayerController* PlayerController);
+
+	UFUNCTION()
+	void OnEndOverlapPlayer(APawn* Pawn, APlayerController* PlayerController);
+
+	UFUNCTION()
+	void UpdateVisibility();
 };
