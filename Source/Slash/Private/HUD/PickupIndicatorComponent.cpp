@@ -4,12 +4,15 @@
 #include "HUD/PickupIndicatorComponent.h"
 #include <HUD/PickupIndicator.h>
 #include <Interfaces/WeaponInterface.h>
+#include <EnhancedInputSubsystems.h>
+#include <Components/TextBlock.h>
 
 void UPickupIndicatorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
 	PickupIndicatorWidget = Cast<UPickupIndicator>(GetUserWidgetObject());
+
 	if (IWeaponInterface* WeaponInterface = Cast<IWeaponInterface>(GetOwner()))
 	{
 		WeaponInterface->OnWeaponEquipped.AddDynamic(this, &UPickupIndicatorComponent::OnEquipped);
@@ -24,33 +27,65 @@ void UPickupIndicatorComponent::BeginPlay()
 		);
 	}
 
+	/**
+	 * Delay for 1 second before setup pick up key display in widget
+	 * as Input Mapping Context take a moment to setup.
+	 */
+	if (UWorld* World = GetWorld())
+	{
+		World->GetTimerManager().SetTimer(
+			DelaySetupKeyTimer,
+			this,
+			&UPickupIndicatorComponent::SetupKeyDisplay,
+			1.f,
+			false
+		);
+	}
+
 	bHiddenInGame = true;
+}
+
+void UPickupIndicatorComponent::SetupKeyDisplay()
+{
+	UWorld* World = GetWorld();
+	if (World && PickupAction && PickupIndicatorWidget)
+	{
+		if (ULocalPlayer* LocalPlayer = World->GetFirstLocalPlayerFromController())
+		{
+			if (UEnhancedInputLocalPlayerSubsystem* EnhancedInputSubsystem =
+				LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+			{
+				TArray<FKey> Keys = EnhancedInputSubsystem->QueryKeysMappedToAction(PickupAction);
+				if (!Keys.IsEmpty())
+				{
+					PickupIndicatorWidget->PickupKeyText->SetText(Keys[0].GetDisplayName());
+				}
+			}
+
+		}
+	}
 }
 
 void UPickupIndicatorComponent::OnEquipped()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s equipped"), *GetOwner()->GetName());
 	bEquipped = true;
 	UpdateVisibility();
 }
 
 void UPickupIndicatorComponent::OnDropped()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s dropped"), *GetOwner()->GetName());
 	bEquipped = false;
 	UpdateVisibility();
 }
 
 void UPickupIndicatorComponent::OnBeginOverlapPlayer(APawn* Pawn, APlayerController* PlayerController)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s begin overlap player"), *GetOwner()->GetName());
 	bOverlapPlayer = true;
 	UpdateVisibility();
 }
 
 void UPickupIndicatorComponent::OnEndOverlapPlayer(APawn* Pawn, APlayerController* PlayerController)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s end overlap player"), *GetOwner()->GetName());
 	bOverlapPlayer = false;
 	UpdateVisibility();
 }

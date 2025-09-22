@@ -21,8 +21,13 @@ private:
 	UPROPERTY();
 	TObjectPtr<class UPickupIndicator> PickupIndicatorWidget;
 
+	/** Input action for pickup */
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UInputAction> PickupAction;
+
 	bool bOverlapPlayer = false;
 	bool bEquipped = false;
+	FTimerHandle DelaySetupKeyTimer;
 
 private:
 	UFUNCTION()
@@ -39,4 +44,8 @@ private:
 
 	UFUNCTION()
 	void UpdateVisibility();
+
+	/** Setup pickup key name in widget */
+	UFUNCTION()
+	void SetupKeyDisplay();
 };

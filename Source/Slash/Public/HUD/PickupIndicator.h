@@ -14,4 +14,7 @@ class SLASH_API UPickupIndicator : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UTextBlock> PickupKeyText;
 };
