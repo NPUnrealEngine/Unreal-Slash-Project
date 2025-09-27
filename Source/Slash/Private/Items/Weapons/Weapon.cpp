@@ -229,8 +229,8 @@ void AWeapon::BoxTrace(FHitResult& BoxHit)
 	const FVector End = BoxTraceEnd->GetComponentLocation();
 
 	TArray<AActor*> ActorsToIgnore;
-	ActorsToIgnore.Add(this);
-	ActorsToIgnore.Add(GetOwner());
+	ActorsToIgnore.AddUnique(this);
+	ActorsToIgnore.AddUnique(GetOwner());
 
 	for (AActor* actor : IgnoreActors)
 	{
@@ -244,7 +244,8 @@ void AWeapon::BoxTrace(FHitResult& BoxHit)
 		FVector(
 			WeaponBox->GetUnscaledBoxExtent().X,
 			WeaponBox->GetUnscaledBoxExtent().Y,
-			1.f),
+			BoxTraceSizeZ
+		),
 		BoxTraceStart->GetComponentRotation(),
 		ETraceTypeQuery::TraceTypeQuery1,
 		false,
@@ -252,9 +253,9 @@ void AWeapon::BoxTrace(FHitResult& BoxHit)
 		bShowDebugBox? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None,
 		BoxHit,
 		true,
-		FLinearColor::Red,
 		FLinearColor::Green,
-		2.0f
+		FLinearColor::Red,
+		ShowDebugBoxDuration
 	);
 	IgnoreActors.AddUnique(BoxHit.GetActor());
 }

@@ -99,43 +99,47 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	double AttackRadius = 150.f;
 
-	UPROPERTY(EditAnywhere, Category = "Weapon")
+	UPROPERTY(EditAnywhere, Category = "Enemy | Weapon")
 	TSubclassOf<class AWeapon> WeaponClass;
 
 	/* Enemy AI controller */
 	TObjectPtr<class AAIController> EnemyController;
 	
+	/** Move to target acceptance radius */
+	UPROPERTY(EditAnywhere, Category = "Enemy | AI Navigation")
+	float AcceptanceRadius = 60.f;
+
 	/* Current patrol target */
-	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
+	UPROPERTY(EditInstanceOnly, Category = "Enemy | AI Navigation")
 	TObjectPtr<AActor> PatrolTarget;
 
 	/* All patrol targets */
-	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
+	UPROPERTY(EditInstanceOnly, Category = "Enemy | AI Navigation")
 	TArray<TObjectPtr<AActor>> PatrolTargets;
 
-	UPROPERTY(EditAnywhere, Category = "AI Navigation")
+	UPROPERTY(EditAnywhere, Category = "Enemy | AI Navigation")
 	double PatrolRadius = 200.f;
 
 	FTimerHandle PatrolTimer;
 
-	UPROPERTY(EditAnywhere, Category = "AI Navigation")
+	UPROPERTY(EditAnywhere, Category = "Enemy | AI Navigation")
 	float PatrolWaitMin = 5.f;
 
-	UPROPERTY(EditAnywhere, Category = "AI Navigation")
+	UPROPERTY(EditAnywhere, Category = "Enemy | AI Navigation")
 	float PatrolWaitMax = 10.f;
 
-	UPROPERTY(EditAnywhere, Category = "AI Behavior | Properties")
+	UPROPERTY(EditAnywhere, Category = "Enemy | AI Behavior | Properties")
 	float PatrollingSpeed = 125.f;
 
-	UPROPERTY(EditAnywhere, Category = "AI Behavior | Properties")
+	UPROPERTY(EditAnywhere, Category = "Enemy | AI Behavior | Properties")
 	float ChasingSpeed = 300.f;
 
 	FTimerHandle AttackTimer;
 
-	UPROPERTY(EditAnywhere, Category = "Combat | Properties")
+	UPROPERTY(EditAnywhere, Category = "Enemy | Combat | Properties")
 	float AttackMin = 0.5f;
 
-	UPROPERTY(EditAnywhere, Category = "Combat | Properties")
+	UPROPERTY(EditAnywhere, Category = "Enemy | Combat | Properties")
 	float AttackMax = 1.f;
 
 	/** AI Behavior Properties */

@@ -98,7 +98,7 @@ void ASlashCharacter::BeginPlay()
 
 void ASlashCharacter::EndPlay(EEndPlayReason::Type EndPlayReason)
 {
-	DelayStaminaRegenTimer.Invalidate();
+	GetWorldTimerManager().ClearTimer(DelayStaminaRegenTimer);
 
 	Super::EndPlay(EndPlayReason);
 }
@@ -490,7 +490,7 @@ void ASlashCharacter::Dodge()
 		Attributes->UseStamina(Attributes->GetDodgeCost());
 		SlashOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
 
-		DelayStaminaRegenTimer.Invalidate();
+		GetWorldTimerManager().ClearTimer(DelayStaminaRegenTimer);
 		bCanStaminaRegen = false;
 		GetWorldTimerManager().SetTimer(
 			DelayStaminaRegenTimer,

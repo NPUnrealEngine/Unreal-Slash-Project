@@ -90,6 +90,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	bool bShowDebugBox = false;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	float ShowDebugBoxDuration = 5.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	float BoxTraceSizeZ = 1.f;
+
 	FTimerHandle DelaySphereCollisionTimer;
 
 private:

@@ -168,7 +168,8 @@ bool ABaseCharacter::CanAttack()
 void ABaseCharacter::Die()
 {
 	Tags.Add(FName("Dead"));
-	PlayDeathMontage();
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if(DeathMontage) PlayDeathMontage();
 }
 
 void ABaseCharacter::DirectionalHitReact(const FVector& ImpactPoint)
@@ -269,6 +270,8 @@ bool ABaseCharacter::IsAlive()
 
 void ABaseCharacter::HandleDamage(float DamageAmount)
 {
+	if (Invounerable) return;
+
 	if (Attributes)
 	{
 		Attributes->ReceiveDamage(DamageAmount);

@@ -37,20 +37,23 @@ public:
 protected:
 #pragma region Combat
 
-	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	UPROPERTY(VisibleAnywhere, Category = "Character | Weapon")
 	TObjectPtr<class AWeapon> EquippedWeapon;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UAttributeComponent> Attributes;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Combat")
 	TObjectPtr<AActor> CombatTarget;
 
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = "Character | Combat")
 	double WarpTargetDistance = 75.f;
 
 	UPROPERTY(BlueprintReadOnly)
 	TEnumAsByte<EDeathPose> DeathPose;
+
+	UPROPERTY(EditAnywhere, Category = "Character | Combat")
+	bool Invounerable = false;
 
 #pragma endregion Combat
 
@@ -138,31 +141,31 @@ protected:
 private:
 #pragma region Animation
 
-	UPROPERTY(EditDefaultsOnly, Category = "Animation | Montage")
+	UPROPERTY(EditDefaultsOnly, Category = "Character | Animation | Montage")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Animation | Montage")
+	UPROPERTY(EditDefaultsOnly, Category = "Character | Animation | Montage")
 	TObjectPtr<UAnimMontage> DeathMontage;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Animation | Montage")
+	UPROPERTY(EditDefaultsOnly, Category = "Character | Animation | Montage")
 	TObjectPtr<UAnimMontage> DodgeMontage;
 
 	/* Attack montage associate character's weapon type */
-	UPROPERTY(EditDefaultsOnly, Category = "Animation | Montage")
+	UPROPERTY(EditDefaultsOnly, Category = "Character | Animation | Montage")
 	TMap<EWeaponType, UAnimMontage*> AttackMontageMap;
 
 #pragma endregion Animation
 
 #pragma region SFX
 
-	UPROPERTY(EditAnywhere, Category = "Sound")
+	UPROPERTY(EditAnywhere, Category = "Character | Sound")
 	TObjectPtr<USoundBase> HitSound;
 
 #pragma endregion SFX
 
 #pragma region VFX
 
-	UPROPERTY(EditAnywhere, Category = "Visual Effect")
+	UPROPERTY(EditAnywhere, Category = "Character | Visual Effect")
 	TObjectPtr<UParticleSystem> HitParticle;
 
 #pragma endregion VFX
