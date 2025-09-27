@@ -265,9 +265,9 @@ void ASlashCharacter::Arm()
 	//UE_LOG(LogTemp, Warning, TEXT("Arm"));
 }
 
-void ASlashCharacter::Die()
+void ASlashCharacter::Die_Implementation()
 {
-	Super::Die();
+	Super::Die_Implementation();
 
 	ActionState = EActionState::EAS_Dead;
 	DisableMeshCollision();

@@ -137,9 +137,9 @@ void AEnemy::DrawDebugNavPathPoints(TArray<FNavPathPoint>& PathPoints)
 	}
 }
 
-void AEnemy::Die()
+void AEnemy::Die_Implementation()
 {
-	Super::Die();
+	Super::Die_Implementation();
 
 	EnemyState = EEnemyState::EES_Dead;
 	ClearAttackTimer();

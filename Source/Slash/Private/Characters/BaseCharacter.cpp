@@ -165,10 +165,9 @@ bool ABaseCharacter::CanAttack()
 	return false;
 }
 
-void ABaseCharacter::Die()
+void ABaseCharacter::Die_Implementation()
 {
 	Tags.Add(FName("Dead"));
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	if(DeathMontage) PlayDeathMontage();
 }
 

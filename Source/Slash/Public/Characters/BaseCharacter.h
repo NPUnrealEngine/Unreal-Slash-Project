@@ -70,7 +70,8 @@ protected:
 	
 	virtual bool CanAttack();
 	
-	virtual void Die();
+	UFUNCTION(BlueprintNativeEvent)
+	void Die();
 	
 	virtual void DirectionalHitReact(const FVector& ImpactPoint);
 	
